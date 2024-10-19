@@ -12,6 +12,6 @@ Real-time Customer Search: Allows users to search for specific IP addresses with
 
 Technologies Used
 Backend: Flask (Python)
-Frontend: HTML, CSS, JavaScript
+Frontend: HTML, CSS, JavaScript.
 Database: MongoDB
 Deployment: Gunicorn, Nginx (optional for production)
