@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hesap Onayı</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .header {
+            background-color: #009688;
+            color: #fff;
+            padding: 10px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+            font-style: italic; /* NETAS IA'yı eğik yapmak için eklendi */
+        }
+        .header img {
+            height: 50px;
+        }
+        .body {
+            padding: 20px;
+        }
+        .footer {
+            font-size: 14px;
+            color: #666;
+            text-align: center;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJwAAAAoCAYAAAAL45MuAAAACXBIWXMAAAsTAAALEwEAmpwYAAAFyGlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDggNzkuMTY0MDM2LCAyMDE5LzA4LzEzLTAxOjA2OjU3ICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdEV2dD0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlRXZlbnQjIiB4bWxuczpkYz0iaHR0cDovL3B1cmwub3JnL2RjL2VsZW1lbnRzLzEuMS8iIHhtbG5zOnBob3Rvc2hvcD0iaHR0cDovL25zLmFkb2JlLmNvbS9waG90b3Nob3AvMS4wLyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgMjEuMCAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIxLTA4LTEzVDE4OjMyOjA0KzAzOjAwIiB4bXA6TWV0YWRhdGFEYXRlPSIyMDIxLTA4LTEzVDE4OjMyOjA0KzAzOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMS0wOC0xM1QxODozMjowNCswMzowMCIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozZjA1YmQ5OC0xY2RlLTUzNDEtOGY2YS1hYjM4NDM2MDExMzgiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDozN2M1ODk3NC1iZDIzLWU0NGQtOWMxNi1h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" />
+        </div>
+        <div class="body">
+            <p>Merhaba {{ username }},</p>
+            <p>Hesabınız başarıyla oluşturuldu! Hoşgeldiniz.</p>
+            <p>Telekomünikasyon hizmetlerimizden en iyi şekilde faydalanmanız için giriş yapabilirsiniz.</p>
+            <p>Herhangi bir sorunuz veya desteğe ihtiyacınız olursa, lütfen bizimle iletişime geçin.</p>
+            <p>İyi günler dileriz!</p>
+            <p>Saygılarımızla.</p>
+        </div>
+        <div class="footer">
+            Tüm Hakları Saklıdır &#8211; © Netaş Telekomünikasyon A.Ş.
+        </div>
+    </div>
+</body>
+</html>

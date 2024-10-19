@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image.png') }}">
+    <title>NIA</title>
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('{{ url_for('static', filename='background.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .header {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+        }
+        .logo {
+            width: 100px;
+            height: auto;
+        }
+        .line {
+            height: 2px;
+            background-color: #1eb8c3;
+            flex-grow: 1;
+            margin-left: 10px;
+        }
+        .separator {
+            width: 2px;
+            height: 20px; /* Çizginin yüksekliği */
+            background-color: #fff; /* Çizginin rengi */
+            margin: 0 10px; /* Çizgi ile diğer öğeler arasındaki boşluk */
+        }
+        .menu {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+            color: #fff;
+        }
+        .menu-item {
+            margin-right: 20px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .menu-item:hover {
+            text-decoration: underline;
+        }
+        .file-upload {
+            margin-top: 70px; /* Üst boşluk */
+            margin-bottom: 40px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+        .file-upload label {
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        .file-upload input[type="file"] {
+            display: none; /* Dosya seçme butonunu gizle */
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .file-upload span {
+            margin-right: 10px; /* IP Adresi label'i gibi */
+            color: #000; /* Dosya adının rengi siyah */
+            height: 27px;
+            overflow: hidden; /* Taşan metni gizle */
+            text-overflow: ellipsis; /* Uzun metinleri üç nokta ile kısalt */
+            border: 1px solid #ccc; /* Sınır rengi */
+            border-radius: 4px;
+            background-color: #fff; /* Arka plan rengi beyaz */
+            padding: 5px; /* IP Adresi label'ı gibi padding ekleniyor */
+            white-space: nowrap; /* Metnin tek satırda kalmasını sağla */
+            width: 170px; /* Sabit genişlik */
+            box-sizing: border-box;
+        }
+        .file-upload button {
+            background-color: #fff; /* Butonların arka plan rengi */
+            color: #000; /* Buton metin rengi */
+            border: 1px solid #ccc;
+            border-radius: 4px; /* Buton sınır rengi */
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 10px; /* Butonlar arasında boşluk */
+            white-space: nowrap;
+            display: inline-block;
+        }
+        .file-upload button:hover {
+            background-color: #e9ecef; /* Üzerine gelindiğinde arka plan rengi */
+        }
+        .file-upload .cancel-button {
+            border-color: #dc3545; /* İptal butonunun sınır rengi */
+            color: #000;
+        }
+        .file-upload .cancel-button:hover {
+            background-color: #f8d7da; /* İptal butonunun üzerine gelindiğinde arka plan rengi */
+        }
+        .ip-address-input {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .ip-address-input label {
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        .ip-address-input input[type="text"] {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            color: #000; /* IP adresi için yazı rengi */
+        }
+        .ip-address-input button {
+            background-color: #fff; /* Butonların arka plan rengi */
+            color: #000; /* Buton metin rengi */
+            border: 1px solid #ccc;
+            border-radius: 4px; /* Buton sınır rengi */
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-right: 1px; /* Butonlar arasında boşluk */
+            margin-left: 10px;
+            white-space: nowrap;
+            display: inline-block;
+            width: 90px;
+        }
+        .ip-address-input button:hover {
+            background-color: #e9ecef; /* OK butonunun üzerine gelindiğinde arka plan rengi */
+        }
+        .ip-address-input .cancel-button {
+            background-color: #fff; /* Cancel butonunun arka plan rengi */
+            color: #000; /* Cancel buton metin rengi */
+            border: none; /* Sınır yok */
+            width: 60px;
+        }
+        .ip-address-input .cancel-button:hover {
+            background-color: #e9ecef; /* Cancel butonunun üzerine gelindiğinde arka plan rengi */
+        }
+        .welcome-container {
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+            width: 450px; /* Genişliği belirleyin */
+            position: absolute;
+            top: 10%; /* Yükseklikten ortalamak için */
+            left: 50%; /* Sol boşluk */
+            transform: translate(-50%, -10%); /* Yükseklikten ortalamak için */
+            text-align: left; /* Sol hizalama */
+            margin-bottom: 30px;
+        }
+        .console-container {
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 680px;
+            height: 300px;
+            overflow: auto;
+            white-space: pre;
+            text-align: left;
+            box-sizing: border-box;
+            position: absolute; /* Sabit konumlandırma */
+            left: 50px; /* Sol hizalama */
+            bottom: 100px; /* Alt hizalama */
+        }
+        .console-container_for_cscf{
+            background-color: #fff;
+            color: #000;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            width: 680px;
+            height: 300px;
+            overflow: auto;
+            white-space: pre;
+            text-align: left;
+            box-sizing: border-box;
+            position: absolute; /* Sabit konumlandırma */
+            right: 50px; /* Sol hizalama */
+            bottom: 100px; /* Alt hizalama */
+        }
+        .console-header {
+            position: absolute; /* Başlığı konumlandırmak için */
+            top: 0; /* Üst kenara hizalama */
+            left: 0; /* Sol kenara hizalama */
+            width: 100%; /* Tam genişlik */
+            background-color:  transparent; /* Başlık arka plan rengi */
+            position: relative;
+            color: #045f7a; /* Başlık rengi */
+            padding: 10px; /* Başlık etrafında boşluk */
+            box-sizing: border-box; /* Padding ve border'ı genişliğe dahil et */
+            font-size: 18px; /* Başlık boyutu */
+            font-weight: bold; /* Başlık kalınlığı */
+            border-radius: 8px 8px 0 0; /* Üst köşeleri yuvarlat */
+        }
+        .download-btn-container {
+             position: absolute;
+             right: 200px; /* Console-container ile hizalı */
+             bottom: 70px; /* Console-container'ın altına yerleştirildi */
+        }
+        .download-btn {
+            background-color: #093454 !important;
+            color: white;
+            padding: 5px 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .download-btn-container .download-btn:hover {
+            background-color: #0ca3b9 !important;
+        }
+        .download-btn:active {
+            background-color: #093454;
+        }
+        .download-btn:focus {
+            outline: none;
+        }
+        .download-btn-container-for-delete {
+             position: absolute;
+             right: 50px; /* Console-container ile hizalı */
+             bottom: 70px; /* Console-container'ın altına yerleştirildi */
+        }
+        .download-btn-for-delete {
+            background-color: #093454 !important;
+            color: white;
+            padding: 5px 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .download-btn-container-for-delete .download-btn-for-delete:hover {
+            background-color: #0ca3b9 !important;
+        }
+        .download-btn-for-delete:active {
+            background-color: #093454;
+        }
+        .download-btn-for-delete:focus {
+            outline: none;
+        }
+        .user-icon {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .user-icon img {
+            width: 20px;
+            height: 20px;
+        }
+        .account-info {
+            display: none;
+            position: absolute;
+            top: 70px;
+            right: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+            text-align: left;
+        }
+        .account-info h2 {
+            margin-top: 0;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+        .change-password-link {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .logout-link {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            color: #dc3545;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .logout-link i {
+            margin-right: 8px;
+        }
+        .change-password-form {
+            display: none;
+            background-color: rgba(0, 0, 0, 0.8);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        .footer {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            text-align: center;
+            color: #fff;
+            font-size: 14px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="user-icon" onclick="toggleAccountInfo()">
+        <img src="{{ url_for('static', filename='user-icon.png') }}" alt="Kullanıcı">
+    </div>
+    <div class="header">
+        <img src="{{ url_for('static', filename='netas-logo.png') }}" alt="Logo" class="logo">
+        <div class="separator"></div> <!-- Çizgi eklendi -->
+        <div class="menu">
+            <div class="menu-item" onclick="showIPPBXMenu()">IP-PBX</div>
+        </div>
+    </div>
+    <div class="welcome-container" id="ippbx-menu">
+        <div class="dropdown">
+            <label for="isbca-area">ISBC Area:</label>
+            <select id="isbca-area" name="isbca-area">
+                <option value="ANKARA">ANKARA</option>
+                <option value="ISTANBUL">İSTANBUL</option>
+                <option value="ADANA">ADANA</option>
+                <option value="IZMIR">İZMİR</option>
+            </select>
+        </div>
+        <div class="file-upload">
+                <label>Excel File:</label>
+                <input type="file" id="file-upload" accept=".xls,.xlsx" onchange="handleFileChange()">
+                <span id="file-name"></span>
+                <button type="button" onclick="document.getElementById('file-upload').click()">Choose File</button>
+                <button type="button" class="cancel-button" onclick="cancelFileSelection()">Cancel</button>
+        </div>
+        <div class="ip-address-input">
+            <label for="ip-address">IP Adresi:</label>
+            <input type="text" id="ip-address" placeholder="IP adresinizi girin">
+            <button type="button" onclick="submitIP()">OK</button>
+            <button type="button" class="cancel-button" onclick="clearIPAddress()">Cancel</button>
+        </div>
+    </div>
+    <div class="console-container" id="console-container">
+        <div class="console-header">ISBC Çıktıları İçin Lütfen Müşteri IP Adresi Giriniz.</div>
+    </div>
+    <div class="console-container_for_cscf" id="console-container_for_cscf">
+        <div class="console-header">CSCF Çıktıları İçin Lütfen Müşteri IP Adresi Giriniz.</div>
+    </div>
+    <div class="download-btn-container">
+        <button class="download-btn" onclick="downloadConsoleContent()">Download</button>
+    </div>
+    <div class="download-btn-container-for-delete">
+        <button class="download-btn-for-delete" onclick="downloadDeleteSBCCommand()">Delete Command</button>
+    </div>
+    <div class="account-info" id="account-info">
+        <h2>Hesap Bilgileri</h2>
+        <p><strong>Ad Soyad:</strong> {{ username }}</p>
+        <p><strong>Mail Adresi:</strong> {{ email }}</p>
+        <a class="change-password-link" onclick="toggleChangePasswordForm()">Şifreyi Değiştir</a>
+        <a class="logout-link" onclick="logout()">
+            <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+        </a>
+        <div class="change-password-form" id="change-password-form">
+            <h3>Şifre Değiştir</h3>
+            <div class="form-group">
+                <label for="current-password">Mevcut Şifre:</label>
+                <input type="password" id="current-password" name="current-password" placeholder="Mevcut şifrenizi girin">
+            </div>
+            <div class="form-group">
+                <label for="new-password">Yeni Şifre:</label>
+                <input type="password" id="new-password" name="new-password" placeholder="Yeni şifrenizi girin">
+            </div>
+            <div class="form-group">
+                <label for="confirm-password">Yeni Şifreyi Onayla:</label>
+                <input type="password" id="confirm-password" name="confirm-password" placeholder="Yeni şifrenizi onaylayın">
+            </div>
+            <div class="form-group">
+                <button onclick="changePassword()">Şifreyi Değiştir</button>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        Tüm Hakları Saklıdır &#8211; © Netaş Telekomünikasyon A.Ş.
+    </div>
+    <script>
+        function toggleAccountInfo() {
+            var accountInfo = document.getElementById('account-info');
+            accountInfo.style.display = (accountInfo.style.display === 'none' || accountInfo.style.display === '') ? 'block' : 'none';
+        }
+
+        function toggleChangePasswordForm() {
+            var changePasswordForm = document.getElementById('change-password-form');
+            changePasswordForm.style.display = (changePasswordForm.style.display === 'none' || changePasswordForm.style.display === '') ? 'block' : 'none';
+        }
+
+        function changePassword() {
+            var currentPassword = document.getElementById('current-password').value;
+            var newPassword = document.getElementById('new-password').value;
+            var confirmPassword = document.getElementById('confirm-password').value;
+
+            if (newPassword !== confirmPassword) {
+                alert('Yeni şifreler uyuşmuyor!');
+                return;
+            }
+
+            fetch('/api/change-password', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: '{{ username }}',
+                    currentPassword: currentPassword,
+                    newPassword: newPassword
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Şifre değişikliği başarılı!');
+                } else {
+                    alert('Şifre değişikliği sırasında bir hata oluştu: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert('Şifre değişikliği sırasında bir hata oluştu.');
+            });
+        }
+
+        function logout() {
+            fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/login';
+                } else {
+                    alert('Çıkış yaparken bir hata oluştu.');
+                }
+            })
+            .catch(error => {
+                console.error('Hata:', error);
+                alert('Çıkış yaparken bir hata oluştu.');
+            });
+        }
+        function updateFileName() {
+            var fileInput = document.getElementById('file-upload');
+            var fileName = document.getElementById('file-name');
+
+            if (fileInput.files.length > 0) {
+                fileName.textContent = fileInput.files[0].name;
+            }
+            else {
+                fileName.textContent = ' ';
+            }
+        }
+        function cancelFileSelection() {
+            var fileInput = document.getElementById('file-upload');
+            fileInput.value = ''; // Dosya seçimlerini temizle
+            updateFileName(); // Dosya adını güncelle
+        }
+        function handleFileChange() {
+            var fileInput = document.getElementById('file-upload');
+            var file = fileInput.files[0];
+
+
+            if (file) {
+                var formData = new FormData();
+                formData.append('file', file);
+                fetch('/pbx', {
+                    method: 'POST',
+                    body: formData
+                }).then(response => response.text())
+                  .then(result => {
+                        alert(result);
+                  })
+                  .catch(error => {
+                           console.error('Error:', error);
+                  });
+            }
+            updateFileName(); // Dosya adını güncelle
+        }
+        function submitIP() {
+            var ipAddress = document.getElementById('ip-address').value;
+            var isbcaArea = document.getElementById('isbca-area').value;
+
+            // IP adresini kontrol et (örneğin, boş olup olmadığını)
+            if (!ipAddress) {
+                alert('Lütfen bir IP adresi girin.');
+            return;
+            }
+
+            var formData = new FormData();
+            formData.append('ip-address', ipAddress); // 'ip-address' anahtar adını kullan
+            formData.append('isbca-area', isbcaArea);
+
+           fetch('/pbx', {
+                method: 'POST',
+                body: formData
+           }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return response.text().then(errorText => {
+                        throw new Error(errorText || 'Bir hata oluştu');
+                  });
+                }
+           }).then(result => {
+                var consoleContainer = document.getElementById('console-container');
+                consoleContainer.textContent = result;
+
+                // Eğer /pbx işlemi başarılı olduysa /get_for_cscf isteğini tetikleyelim
+                return fetch('/get_for_cscf', {
+                    method: 'POST',
+                    body: formData
+                });
+           }).then(response => {
+                if (response.ok) {
+                    return response.text();
+                } else {
+                    return response.text().then(errorText => {
+                        throw new Error(errorText || 'Bir hata oluştu');
+                  });
+                }
+           }).then(result => {
+                var consoleContainer_for_cscf = document.getElementById('console-container_for_cscf');
+                consoleContainer_for_cscf.textContent = result;
+           }).catch(error => {
+                alert('Bir hata oluştu: ' + error.message);
+           });
+        }
+        function clearIPAddress() {
+            const ipAddressInput = document.getElementById('ip-address');
+            ipAddressInput.value = ''; // IP adres alanını temizle
+            ipAddressInput.placeholder = 'IP adresinizi girin'; // Placeholder'ı varsayılan hale getir
+            consoleContainer.textContent = '';
+        }
+        document.getElementById('downloadBtn').addEventListener('click', downloadConsoleContent);
+        async function downloadConsoleContent() {
+            var consoleContainer = document.getElementById('console-container');
+            var consoleContainerForCscf = document.getElementById('console-container_for_cscf');
+
+            // İlk container için metni al
+            var textToDownload1 = consoleContainer.textContent;
+            // İkinci container için metni al
+            var textToDownload2 = consoleContainerForCscf.textContent;
+
+            var restrictedStart = "ISBC Çıktıları İçin Lütfen Müşteri IP Adresi Giriniz";
+            var restrictedStart_for_cscf = "CSCF Çıktıları İçin Lütfen Müşteri IP Adresi Giriniz";
+
+
+            var cleanedTextToDownload1 = textToDownload1.replace(/\s+/g, ' ').trim();
+            var cleanedTextToDownload2 = textToDownload2.replace(/\s+/g, ' ').trim();
+            var cleanedRestrictedStart = restrictedStart.replace(/\s+/g, ' ').trim();
+            var cleanedRestrictedStart_for_cscf = restrictedStart_for_cscf.replace(/\s+/g, ' ').trim();
+            // İki dosyada da içerik kontrolü yap
+            if (cleanedTextToDownload1.startsWith(cleanedRestrictedStart) && cleanedTextToDownload2.startsWith(cleanedRestrictedStart_for_cscf)) {
+                alert('İndirilecek bir içerik yok.');
+                return;
+            }
+
+            // Backend'den müşteri bilgisini çek
+            try {
+                const response = await fetch('/get_customer');
+                const data = await response.json();
+                var customerName = data.customer || 'SBC_output';
+            } catch (error) {
+                console.error('Müşteri bilgisi alınamadı:', error);
+                var customerName = 'SBC_output';
+            }
+
+            // İlk dosya için indirme işlemi
+            if (!cleanedTextToDownload1.startsWith(cleanedRestrictedStart)) {
+                var blob1 = new Blob([textToDownload1], { type: 'text/plain' });
+                var url1 = window.URL.createObjectURL(blob1);
+                var a1 = document.createElement('a');
+                a1.style.display = 'none';
+                a1.href = url1;
+                a1.download = customerName + '_SBC_Output.txt';
+                document.body.appendChild(a1);
+                a1.click();
+                window.URL.revokeObjectURL(url1);
+                document.body.removeChild(a1);
+            }
+
+            // İkinci dosya için indirme işlemi
+            if (!cleanedTextToDownload2.startsWith(cleanedRestrictedStart)) {
+                var blob2 = new Blob([textToDownload2], { type: 'text/plain' });
+                var url2 = window.URL.createObjectURL(blob2);
+                var a2 = document.createElement('a');
+                a2.style.display = 'none';
+                a2.href = url2;
+                a2.download = customerName + '_CSCF_Output.txt';
+                document.body.appendChild(a2);
+                a2.click();
+                window.URL.revokeObjectURL(url2);
+                document.body.removeChild(a2);
+            }
+        }
+        document.getElementById('downloadBtn').addEventListener('click', downloadDeleteSBCCommand);
+        async function downloadDeleteSBCCommand() {
+            var consoleContainer = document.getElementById('console-container');
+            var textToDownload1 = consoleContainer.textContent;
+            var restrictedStart = "ISBC Çıktıları İçin Lütfen Müşteri IP Adresi Giriniz"
+            var cleanedTextToDownload1 = textToDownload1.replace(/\s+/g, ' ').trim();
+            var cleanedRestrictedStart = restrictedStart.replace(/\s+/g, ' ').trim();
+
+            if (cleanedTextToDownload1.startsWith(cleanedRestrictedStart)) {
+                alert('İndirilecek bir içerik yok.');
+                return;
+            }
+
+            else {
+                try {
+                    const response = await fetch('/get_customer');
+                    const data = await response.json();
+                    customerName = data.customer || customerName;
+                } catch (error) {
+                    console.error('Müşteri bilgisi alınamadı:', error);
+                }
+                // delete_command_for_sbc için fetch
+                fetch('/delete_command_for_sbc', {
+                    method: 'POST'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                        return response.text();  // Veriyi text olarak alıyoruz
+                })
+                .then(data => {
+                    // Gelen veriyi bir blob olarak oluşturun
+                    const blob = new Blob([data], { type: 'text/plain' });
+
+                    // Blob'u bir URL'e dönüştürün
+                    const url = window.URL.createObjectURL(blob);
+
+                    // İndirme işlemini tetikleyin
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${customerName}_SBC_Delete_Command.txt`;  // İndirilecek dosyanın adı
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Bellekteki objeleri temizleyin
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+
+                // delete_command_for_cscf için fetch
+                fetch('/delete_command_for_cscf', {
+                    method: 'POST'
+                })
+                .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                    return response.text();  // Veriyi text olarak alıyoruz
+                })
+                .then(data => {
+                    // Gelen veriyi bir blob olarak oluşturun
+                    const blob = new Blob([data], { type: 'text/plain' });
+
+                    // Blob'u bir URL'e dönüştürün
+                    const url = window.URL.createObjectURL(blob);
+
+                    // İndirme işlemini tetikleyin, müşteri ismini dosya adına ekleyin
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `${customerName}_CSCF_Delete_Command.txt`;  // Müşteri ismi ile dosya adı dinamik olarak ayarlanır
+                    document.body.appendChild(a);
+                    a.click();
+
+                    // Bellekteki objeleri temizleyin
+                    a.remove();
+                    window.URL.revokeObjectURL(url);
+                })
+                .catch(error => {
+                    console.error('There has been a problem with your fetch operation:', error);
+                });
+            }
+        }
+    </script>
+</body>
+</html>

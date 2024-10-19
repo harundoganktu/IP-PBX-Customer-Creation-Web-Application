@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        h1 {
+            color: #333333;
+        }
+        p {
+            color: #555555;
+            font-size: 16px;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 16px;
+            color: #ffffff;
+            background-color: #007bff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .button:hover {
+            background-color: #0056b3;
+        }
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #777777;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Şifre Sıfırlama Talebi</h1>
+        <p>Merhaba {{ username }},</p>
+        <p>Şifrenizi sıfırlamak için aşağıdaki bağlantıya tıklayın:</p>
+        <a href="{{ reset_url }}" class="button">Şifreyi Sıfırla</a>
+        <footer>
+            <p>Bu e-posta otomatik olarak gönderilmiştir. Lütfen bu e-posta ile ilgili destek için bizimle iletişime geçmeyin.</p>
+        </footer>
+    </div>
+</body>
+</html>

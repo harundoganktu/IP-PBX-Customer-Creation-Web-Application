@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image.png') }}">
+    <title>NIA</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-image: url('{{ url_for('static', filename='background.jpg') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 400px;
+            transition: transform 0.3s ease;
+        }
+        .container:hover {
+            transform: translateY(-10px);
+        }
+        .container img {
+            width: 120px;
+            margin-bottom: 30px;
+        }
+        .container label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #555;
+            text-align: left;
+        }
+        .container input[type="text"],
+        .container input[type="password"],
+        .container input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            color: #333;
+            background-color: #fafafa;
+            transition: border-color 0.3s ease;
+        }
+        .container input[type="text"]:focus,
+        .container input[type="password"]:focus,
+        .container input[type="email"]:focus {
+            border-color: #26a69a;
+            outline: none;
+        }
+        .container button {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s ease;
+            margin-bottom: 10px;
+        }
+        .register-button {
+            background-color: #0b2849;
+        }
+        .register-button:hover {
+            background-color: #01579b;
+        }
+        .login-button {
+            background-color: #0b2849;
+        }
+        .login-button:hover {
+            background-color: #01579b;
+        }
+        .flash-messages {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+        .flash-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .flash-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .flash-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .forgot-password {
+            margin-top: 15px;
+            text-align: left; /* Bağlantıyı sola yasla */
+        }
+        .forgot-password a {
+            color: #0b2849;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .forgot-password a:hover {
+            color: #01579b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{{ url_for('static', filename='image.png') }}" alt="Logo">
+
+        <!-- Flash Mesajları -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <div class="flash-messages">
+              {% for category, message in messages %}
+                <div class="flash-{{ category }}">{{ message }}</div>
+              {% endfor %}
+            </div>
+          {% endif %}
+        {% endwith %}
+
+        <!-- Form -->
+        <form method="POST" action="{{ url_for('handle_form') }}">
+            <label for="email">E-Posta</label>
+            <input type="email" id="email" name="email" placeholder="E-Posta Adresi" required>
+
+            <label for="username">Kullanıcı Adı</label>
+            <input type="text" id="username" name="username" placeholder="Kullanıcı Adı" required>
+
+            <label for="password">Şifre</label>
+            <input type="password" id="password" name="password" placeholder="Şifre" required>
+
+            <button type="submit" name="action" value="login" class="login-button">Login</button>
+            <button type="submit" name="action" value="register" class="register-button">Register</button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="{{ url_for('forgot_password') }}">Şifremi Unuttum</a>
+        </div>
+    </div>
+</body>
+</html>
